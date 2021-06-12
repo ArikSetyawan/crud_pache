@@ -70,6 +70,19 @@ class resource_user(Resource):
     	else:
     		return jsonify({'message':'user not found'})
 
+
+    def delete(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('id_user', type=int, help='iki ngunu id_user perlu. dadi katutno cuk, tipe datane int', required=True)
+        args = parser.parse_args()
+        cek_user = user.select().where(user.id == args['id_user'])
+        if cek_user.exists():
+            delete_user = user.delete().where(user.id == args['id_user'])
+            delete_user.execute()
+            return jsonify({'message':"User Deleted"})
+        else:
+            return jsonify({'message':'user not found'})
+
 class resource_todo(Resource):
 	def get():
 		return 'iki get tekok todo'
